@@ -1,0 +1,11 @@
+{
+    "id": "06e549b6-5653-4ea7-92c9-a8cd14067806",
+    "name": "TPS Counter",
+    "description": "Counts the servers ticks per second",
+    "author": "prath",
+    "version": "1.0.0",
+    "main_class": "main.lua",
+    "api_revision": 2,
+    "createdAt": "2025-02-28T00:00:00Z",
+    "updatedAt": "2025-03-03T00:00:00Z"
+}
