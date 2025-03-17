@@ -1,4 +1,8 @@
 
+name = "TPS Counter"
+description = "Displays the servers ticks per second"
+
+
 function onEnable()
     Notify("TPS enabled!")
 end
