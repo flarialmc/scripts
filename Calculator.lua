@@ -1,6 +1,6 @@
-name="Calculator"
-description="Arithmetic Calculator in Minecraft itself"
-author="Streoids"
+name = "Calculator"
+description = "Arithmetic Calculator in Minecraft itself"
+author = "Streoids"
 function onLoad()
     registerCommand("calc", function(args)
         if #args == 0 then return print("§4calc: No calculation detected. use .calchelp for help")
