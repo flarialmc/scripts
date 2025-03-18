@@ -12,7 +12,7 @@ function onLoad()
         if expression:match("%a")then
             return print("§4calc: Invalid calculation")
         end
-        local func=load("return"..expression)
+        local func=load("return "..expression)
         if not func then return print("§4calc: Invalid input")
         end
         local success, result=pcall(func)
