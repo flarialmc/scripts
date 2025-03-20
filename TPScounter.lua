@@ -3,15 +3,6 @@ name = "TPS Counter"
 description = "Displays the servers ticks per second"
 author = "prath"
 
-
-function onEnable()
-    print("TPS enabled!")
-end
-
-function onDisable()
-    print("TPS disabled!")
-end
-
 Ticks = {}
 
 onEvent("TickEvent", function()
