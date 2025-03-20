@@ -1,6 +1,7 @@
 
 name = "TPS Counter"
 description = "Displays the servers ticks per second"
+author = "prath"
 
 
 function onEnable()
