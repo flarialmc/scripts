@@ -1,16 +1,10 @@
-name = "calculator"
+name = "Calculator"
 description = "Arithmetic Calculator in Minecraft itself"
 author = "Streoids"
-aliases = {"calc"}
+aliases = {"calc", "calchelp"}
 
 function execute(args)
-    if #args == 0 then
-        return print("§4calc: No calculation detected. use '.calc help' for help")
-    end
-
-    local expression = table.concat(args, " ")
-
-    if expression == "help" then
+    if #args==0 or args[1]=="calchelp" then
         print("§ecalc is a simple calculator that runs in Minecraft, by §6S§6t§6r§6e§6o§6i§6d§6s")
         print("§fIt can perform arithmetic functions such as:")
         print("§o§bAddition [ + ]")
@@ -27,28 +21,19 @@ function execute(args)
         print("§k§2!.§a:§2'§r §4Flarial on top! §k§2!.§a:§2'")
         return
     end
-
+    local expression=table.concat(args, " ")
     if expression:match("[+%-/%*%^][+%-/%*%^]") then
         return print("§4calc: Invalid operator")
     end
-
     if expression:match("%a") then
         return print("§4calc: Invalid calculation")
     end
-
-    local func = load("return " .. expression)
-    if not func then
-        return print("§4calc: Invalid input")
+    local func=load("return "..expression)
+    if not func then return print("§4calc: Invalid input") end
+    local success, result=pcall(func)
+    if not success then return print("§4calc: Invalid calculation") end
+    if result==math.huge or result==-math.huge then
+        return print("§4calc: Can't divide by 0. Consider getting an education")
     end
-
-    local success, result = pcall(func)
-    if not success then
-        return print("§4calc: Invalid calculation")
-    end
-
-    if result == math.huge or result == -math.huge then
-        return print("§4calc: can't divide by 0. Consider getting an education")
-    end
-
-    print("§acalc: " .. (result == math.floor(result) and math.floor(result) or result))
+    print("§acalc: "..(math.floor(result)==result and math.floor(result) or result))
 end
