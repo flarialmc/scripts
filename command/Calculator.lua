@@ -4,7 +4,7 @@ author = "Streoids"
 aliases = {"calc", "calchelp"}
 
 function execute(args)
-    if #args==0 or args[1]=="calchelp" then
+    if #args==0 then
         print("§ecalc is a simple calculator that runs in Minecraft, by §6S§6t§6r§6e§6o§6i§6d§6s")
         print("§fIt can perform arithmetic functions such as:")
         print("§o§bAddition [ + ]")
