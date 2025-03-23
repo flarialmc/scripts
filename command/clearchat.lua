@@ -4,6 +4,6 @@ author = "Streoids"
 
 function execute(args)
     for _ = 1, 100 do
-        print("")
+        print(" ")
     end
 end
