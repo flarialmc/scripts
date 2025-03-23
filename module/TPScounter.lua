@@ -1,16 +1,6 @@
-
 name = "TPS Counter"
 description = "Displays the servers ticks per second"
 author = "prath"
-
-
-function onEnable()
-    print("TPS enabled!")
-end
-
-function onDisable()
-    print("TPS disabled!")
-end
 
 Ticks = {}
 
@@ -25,6 +15,6 @@ end)
 
 onEvent("RenderEvent", function()
     if (Ticks and type(Ticks) == "table") then
-        FlarialGUI.NormalRender(32, "TPS: " .. #Ticks)
+        gui.render("TPS: " .. #Ticks, 32)
     end
 end)

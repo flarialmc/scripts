@@ -1,10 +1,9 @@
-name = "Clean chat"
-description = "cleans your chat, use .clear"
+name = "clear"
+description = "cleans your chat"
 author = "Streoids"
-function onLoad()
-    registerCommand("clear", function(args)
-        for i = 1, 100 do
-            print(" ")
-        end
-    end)
+
+function execute(args)
+    for _ = 1, 100 do
+        print("")
+    end
 end
