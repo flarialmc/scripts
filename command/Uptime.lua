@@ -1,11 +1,12 @@
 name = "uptime"
 description = "Tells the time since Minecraft has started."
 author = "Streoids"
---@Streoids
+aliases = {"uptm"}
 
-local startTime=os.time()
-
+local start=os.time()
 function execute(args)
-    local elapsed=os.time()-startTime
-    client.notify(string.format("%dh %dm %ds", elapsed//3600,(elapsed%3600)//60,elapsed%60))
+    if #args==0 or args[1]=="uptm" then
+        local elapsed=os.time()-start
+        client.notify(string.format("%dh %dm %ds", elapsed//3600, (elapsed%3600)//60, elapsed%60))
+    end
 end
