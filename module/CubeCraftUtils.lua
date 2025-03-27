@@ -62,9 +62,11 @@ onEvent("KeyEvent", function(key, action)
     end
 
     -- Manual accept keybind logic
-    if autoAcceptToggle.value and manualAcceptToggle.value and manualAcceptKeybind.value and pendingInviteNickname ~= nil then
+    if autoAcceptToggle.value and manualAcceptToggle.value and manualAcceptKeybind.value and pendingInviteNickname ~= nil the
         player.executeCommand("/party accept " .. pendingInviteNickname)
         print(PREFIX .. "§aManually accepted invite from §b" .. pendingInviteNickname .. "§a!")
+
+        -- Reset pendingInviteNickname after accepting the invite
         pendingInviteNickname = nil
     end
 
@@ -105,12 +107,22 @@ onEvent("ChatReceiveEvent", function(message, name, type)
 
     -- Auto Accept Logic
     if autoAcceptToggle.value then
-        -- Extract the nickname of the player who sent the invite
-        pendingInviteNickname = string.match(message, "§r§aYou have received a party invite from §r§b(.-)§r§a!")
-        
+        -- Only update pendingInviteNickname if it is currently nil
+        if pendingInviteNickname == nil then
+            pendingInviteNickname = string.match(message, "§r§aYou have received a party invite from §r§b(.-)§r§a!")
+            
+            -- Print a message if a party invitation is found
+            if pendingInviteNickname ~= nil then
+                print(PREFIX .. "§bFound party invitation from §b" .. pendingInviteNickname .. "§a!")
+            end
+        end
+    
+        -- Check if pendingInviteNickname has a valid value and manual accept is disabled
         if pendingInviteNickname ~= nil and not manualAcceptToggle.value then
             player.executeCommand("/party accept " .. pendingInviteNickname)
             print(PREFIX .. "§aAutomatically accepted invite from §b" .. pendingInviteNickname .. "§a!")
+            
+            -- Reset pendingInviteNickname after accepting the invite
             pendingInviteNickname = nil
         end
     end
