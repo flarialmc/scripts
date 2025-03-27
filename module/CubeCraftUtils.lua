@@ -62,7 +62,7 @@ onEvent("KeyEvent", function(key, action)
     end
 
     -- Manual accept keybind logic
-    if autoAcceptToggle.value and manualAcceptToggle.value and manualAcceptKeybind.value and pendingInviteNickname ~= nil the
+    if autoAcceptToggle.value and manualAcceptToggle.value and manualAcceptKeybind.value and pendingInviteNickname ~= nil then
         player.executeCommand("/party accept " .. pendingInviteNickname)
         print(PREFIX .. "§aManually accepted invite from §b" .. pendingInviteNickname .. "§a!")
 
