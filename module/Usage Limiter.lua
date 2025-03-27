@@ -1,6 +1,6 @@
-name="Usage Limiter"
-description="Limit your Minecraft usage time"
-author="Streoids"
+name = "Usage Limiter"
+description = "Limit your Minecraft usage time"
+author = "Streoids"
 function onLoad()
     registerCommand("limit", function(args)
         local tval, unit=args[1]:match("(%d+)([smh])")
