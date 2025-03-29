@@ -5,7 +5,7 @@ aliases = {"uptm"}
 
 local start=os.time()
 function execute(args)
-    if #args==0 or args[1]=="uptm" then
+    if #args==0 then
         local elapsed=os.time()-start
         client.notify(string.format("%dh %dm %ds", elapsed//3600, (elapsed%3600)//60, elapsed%60))
     end
