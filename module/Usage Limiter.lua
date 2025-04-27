@@ -28,7 +28,7 @@ onEvent("TickEvent", function()
             msg[3]=true
         end
         if tmleft<=0 then
-            client.crash()
+            client.yeet()
             crash=nil
         end
     end
