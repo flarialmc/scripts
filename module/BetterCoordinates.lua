@@ -2,6 +2,7 @@
 name = "Better Coordinates"
 description = "Displays player coordinates"
 author = "prath"
+version = "1.0.0"
 
 
 showXYZ = settings.addToggle("Show XYZ", "show xyz", true)
