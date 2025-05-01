@@ -2,7 +2,6 @@
 name = "Better Coordinates"
 description = "Displays player coordinates"
 author = "prath"
-version = "1.0.0"
 
 
 showXYZ = settings.addToggle("Show XYZ", "show xyz", true)
@@ -20,6 +19,7 @@ function getPlayerPos(showDecimals, nether)
         x = x / 8
         z = z / 8
     end
+    y = y - 1.6
     if (x == nil or y == nil or z == nil) then
         return "N/a", "N/a", "N/a"
     end
@@ -40,22 +40,27 @@ end
 
 
 onEvent("RenderEvent", function()
-    local posOv = getPlayerPos(showDecimalPlaces.value, false)
-    local posN = getPlayerPos(showDecimalPlaces.value, true)
-    local textOv = ""
-    local textN = ""
-    if (showXYZ.value) then
-        textOv = "X: " .. posOv.x .. ", Y: ".. posOv.y .. ", Z: ".. posOv.z
-        textN = "X: " .. posN.x .. ", Y: ".. posN.y .. ", Z: ".. posN.z
-    else
-        textOv = posOv.x .. ", " .. posOv.y .. ", " .. posOv.z
-        textN = posN.x .. ", " .. posN.y .. ", " .. posN.z
+    local screen = client.getScreenName()
+    if (screen == "hud_screen" or screen == "chat_screen" or screen == "pause_screen") then
+
+        local posOv = getPlayerPos(showDecimalPlaces.value, false)
+        local posN = getPlayerPos(showDecimalPlaces.value, true)
+        local textOv = ""
+        local textN = ""
+        if (showXYZ.value) then
+            textOv = "X: " .. posOv.x .. ", Y: ".. posOv.y .. ", Z: ".. posOv.z
+            textN = "X: " .. posN.x .. ", Y: ".. posN.y .. ", Z: ".. posN.z
+        else
+            textOv = posOv.x .. ", " .. posOv.y .. ", " .. posOv.z
+            textN = posN.x .. ", " .. posN.y .. ", " .. posN.z
+        end
+        local text = ""
+        if (showNetherCoords.value) then
+            text = "Overworld: " .. textOv .. "\nNether: " .. textN
+        else
+            text = textOv
+        end
+        gui.text({10 * xOffset.value, 10 * yOffset.value}, text, 10, 10, 150)
+
     end
-    local text = ""
-    if (showNetherCoords.value) then
-        text = "Overworld: " .. textOv .. "\nNether: " .. textN
-    else
-        text = textOv
-    end
-    gui.text({10 * xOffset.value, 10 * yOffset.value}, text, 10, 10, 150)
 end)
