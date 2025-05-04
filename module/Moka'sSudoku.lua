@@ -100,8 +100,10 @@ local function generatePuzzle(diff)
     printGrid()
 end
 
--- Default puzzle on load
-generatePuzzle("medium")
+function onEnable()
+    -- Default puzzle on load
+    generatePuzzle("medium")
+end
 
 -- Command handler
 registerCommand("sudoku", function(args)
