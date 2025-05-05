@@ -5,28 +5,36 @@ author = "prath"
 
 settings.addHeader("Main Coordinates Settings")
 
-showXYZ = settings.addToggle("Show XYZ", "show xyz", true)
-showDecimalPlaces = settings.addToggle("Show decimal places", "show decimal places", false)
-showOtherDimCoords = settings.addToggle("Show other dimension's coords", "nether if you're in the overworld and vice versa", false)
-xOffset = settings.addSlider("X offset", "x offset (10x multiplier)", 1, 150, 1, true)
-yOffset = settings.addSlider("Y offset", "y offset (10x multiplier)", 1, 150, 1, true)
+local showXYZ = settings.addToggle("Show XYZ", "show xyz", true)
+local showDecimalPlaces = settings.addToggle("Show decimal places", "show decimal places", false)
+local showOtherDimCoords = settings.addToggle("Show other dimension's coords", "nether if you're in the overworld and vice versa", false)
+local xOffset = settings.addSlider("X offset", "x offset (10x multiplier)", 1, 150, 1, true)
+local yOffset = settings.addSlider("Y offset", "y offset (10x multiplier)", 4, 150, 1, true)
 
 settings.extraPadding()
 
 settings.addHeader("Death Coordinates Settings")
 
-renderDeathCoords = settings.addToggle("Render death coords", "render death coords", true)
-showDimension = settings.addToggle("Show dimension", "show dimension", true)
-showTime = settings.addToggle("Show time", "time in dd/mm/yy H:m", false)
-showIndex = settings.addToggle("Show index", "show index", true)
-noOfDeaths = settings.addSlider("Number of deaths to render", "greatest integer less than or equal to selected value is taken", 1, 10, 1, true)
-xOffsetD = settings.addSlider("X offset 2", "x offset 2 (10x multiplier)", 1, 150, 1, true)
-yOffsetD = settings.addSlider("Y offset 2", "y offset 2 (10x multiplier)", 1, 150, 10, true)
+local renderDeathCoords = settings.addToggle("Render death coords", "render death coords", true)
+local showDimension = settings.addToggle("Show dimension", "show dimension", true)
+local showTime = settings.addToggle("Show time", "time in dd/mm/yy H:m", false)
+local showIndex = settings.addToggle("Show index", "show index", true)
+local noOfDeaths = settings.addSlider("Number of deaths to render", "greatest integer less than or equal to selected value is taken", 1, 10, 1, true)
+local xOffsetD = settings.addSlider("X offset 2", "x offset 2 (10x multiplier)", 1, 150, 1, true)
+local yOffsetD = settings.addSlider("Y offset 2", "y offset 2 (10x multiplier)", 10, 150, 1, true)
 
+settings.extraPadding()
+
+local clearDeathCoords = settings.addToggle("Clear death coords", "turn on and off to clear death coords", false)
+local launchCDCVal = clearDeathCoords.value
+
+
+local dir = "scripts/Data/Better Coordinates/"
+local fp = dir .. "deathcoords.txt"
 
 
 local function getPlayerPos(showDecimals, mul)
-    x, y, z = player.position()
+    local x, y, z = player.position()
     y = y - 1.6
     x = x * mul
     z = z * mul
@@ -60,9 +68,6 @@ local function split(input, sep)
     return t
 end
 
-local dir = "scripts/Data/Better Coordinates/"
-local fp = dir .. "deathcoords.txt"
-
 local function checkDir()
     if (not fs.exists(dir)) then
         fs.create(dir)
@@ -85,8 +90,8 @@ local function readDeathCoords()
     local fileData = fs.readFile(fp)
     local deathObjs = split(fileData, "\n")
 
-    local deaths ={}
-    for i= 1, #deathObjs do
+    local deaths = {}
+    for i = 1, #deathObjs do
         deaths[i] = split(deathObjs[i], "->")
     end
 
@@ -95,6 +100,8 @@ end
 
 
 local death = false
+local execCDC = false
+
 onEvent("TickEvent", function()
     local screen = client.getScreenName()
     local health = player.health()
@@ -107,6 +114,12 @@ onEvent("TickEvent", function()
             writeDeathCoords(getPlayerPos(showDecimalPlaces.value, 1), player.dimension())
         end
     end
+    if ((clearDeathCoords and not launchCDCVal) or (not clearDeathCoords and launchCDCVal)) then
+        execCDC = true
+    end
+    if (clearDeathCoords.value and execCDC) then
+        fs.remove(fp)
+    end
 end)
 
 
@@ -116,6 +129,8 @@ onEvent("RenderEvent", function()
 
         local dimension = player.dimension()
         local text = ""
+
+        local dimensionOffset = 0
 
         if (dimension == "TheEnd") then
             local pos = getPlayerPos(showDecimalPlaces.value, 1)
@@ -152,11 +167,15 @@ onEvent("RenderEvent", function()
             else
                 text = textOv
             end
+
+            if (showOtherDimCoords.value) then
+                dimensionOffset = 10
+            end
         end
 
-        gui.text({10 * xOffset.value, 10 * yOffset.value}, text, 10, 10, 150)
+        gui.text({10 * xOffset.value, 10 * yOffset.value + dimensionOffset}, text, 10, 10, 150)
 
-        if (renderDeathCoords.value) then
+        if (renderDeathCoords.value and fs.exists(fp)) then
 
             local deaths = readDeathCoords()
             local maxDeathsRenderable = math.min(math.floor(noOfDeaths.value), #deaths)
@@ -178,7 +197,7 @@ onEvent("RenderEvent", function()
                 text = text .. "\n"
             end
 
-            gui.text({10 * xOffsetD.value, 10 * yOffsetD.value + 15 * maxDeathsRenderable}, text, 10, 10, 150)
+            gui.text({10 * xOffsetD.value, 10 * yOffsetD.value + 15 * maxDeathsRenderable + dimensionOffset * 2}, text, 10, 10, 150)
 
         end
 
