@@ -1,0 +1,83 @@
+[
+  {
+    "filename": "AFKmessage.lua",
+    "name": "AFK message sender",
+    "description": "Sends a message in Hive chat when you are afk kicked, useful for party chat",
+    "author": "",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/AFKmessage.lua"
+  },
+  {
+    "filename": "Auto Crasher.lua",
+    "name": "Auto Crasher 5000",
+    "description": "Auto Crashes your game when you enable it",
+    "author": "billy",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/Auto Crasher.lua"
+  },
+  {
+    "filename": "BetterCoordinates.lua",
+    "name": "Better Coordinates",
+    "description": "Displays player coordinates",
+    "author": "prath",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/BetterCoordinates.lua"
+  },
+  {
+    "filename": "CubeCraftUtils.lua",
+    "name": "CubeCraft Utils",
+    "description": "Automatically invites online friends, accepts party invites, rage quits to the lobby and tracks player kills with a UI.",
+    "author": "Zgoly",
+    "version": "1.0.1",
+    "type": "module",
+    "path": "module/CubeCraftUtils.lua"
+  },
+  {
+    "filename": "Moka'sSudoku.lua",
+    "name": "Moka",
+    "description": "Moka",
+    "author": "moka",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/Moka'sSudoku.lua"
+  },
+  {
+    "filename": "TPScounter.lua",
+    "name": "TPS Counter",
+    "description": "Displays the servers ticks per second",
+    "author": "prath",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/TPScounter.lua"
+  },
+  {
+    "filename": "Usage Limiter.lua",
+    "name": "Usage Limiter",
+    "description": "Limit your Minecraft usage time",
+    "author": "Streoids",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/Usage Limiter.lua"
+  },
+  {
+    "filename": "chat filter.lua",
+    "name": "Chat Filter",
+    "description": "Hides chat messages containing specified words.",
+    "author": "DxJar",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/chat filter.lua"
+  },
+  {
+    "filename": "queue dodger.lua",
+    "name": "Queue Dodger",
+    "description": "Automatically queues a specified gamemode in The Hive when a specified player joins the game",
+    "author": "s6iy",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/queue dodger.lua"
+  }
+]

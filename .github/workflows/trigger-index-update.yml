@@ -1,0 +1,22 @@
+name: Trigger Index Update
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'module/**/*.lua'
+      - 'command/**/*.lua'
+
+jobs:
+  trigger-marketplace-update:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Trigger marketplace index generation
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.MARKETPLACE_TOKEN }}
+          repository: flarialmc/scripting-marketplace
+          event-type: scripts-updated
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
