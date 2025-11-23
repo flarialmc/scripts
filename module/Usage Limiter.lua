@@ -1,5 +1,5 @@
 name = "Usage Limiter"
-description = "Limit your Minecraft usage time"
+description = "Limit your Minecraft usage time. to use this type .limit <time> (s for seconds, m for minutes, h for hours) "
 author = "Streoids"
 function onLoad()
     registerCommand("limit", function(args)
@@ -18,13 +18,13 @@ onEvent("TickEvent", function()
     if crash then
         local tmleft=crash-os.time()
         if tmleft==3 and not msg[1] then
-            print("§cBari§r : Times up!! closing in 3")
+            print("§cUsage Limiter§r : Times up!! closing in 3")
             msg[1]=true
         elseif tmleft==2 and not msg[2] then
-            print("§cBari§r : 2")
+            print("§cUsage Limiter§r : 2")
             msg[2]=true
         elseif tmleft==1 and not msg[3] then
-            print("§cBari§r : 1")
+            print("§cUsage Limiter§r : 1")
             msg[3]=true
         end
         if tmleft<=0 then
@@ -33,3 +33,4 @@ onEvent("TickEvent", function()
         end
     end
 end)
+
