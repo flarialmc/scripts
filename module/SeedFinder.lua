@@ -11,7 +11,7 @@ author = "zebedelu"
 -- Section 1: HTTP Bridge Integration
 -- ============================================================================
 
-local SERVER_URL = "http://127.0.0.1:7890"
+local SERVER_URL = "https://mineseedfinder.vercel.app"
 local serverOnline = false
 local serverWarned = false
 local lastServerCheck = 0
@@ -212,7 +212,7 @@ end
 local seedTextBox = settings.addTextBox("Seed", "Enter your world seed (numbers only)", "1", 30)
 local radiusSlider = settings.addSlider("Radius", "How far to search (chunks)", 10, 200, 1)
 local maxResultsSlider = settings.addSlider("Max Results", "Maximum structures to display", 15, 50, 1)
-local serverUrlTextBox = settings.addTextBox("Server URL", "SeedFinder API server", "http://127.0.0.1:7890", 40)
+local serverUrlTextBox = settings.addTextBox("Server URL", "SeedFinder API server", "https://mineseedfinder.vercel.app", 40)
 local rescanKey = settings.addKeybind("Rescan", "Press to clear and rescan structures")
 local notifyToggle = settings.addToggle("Scan Notification", "Show a notification when scan completes", true)
 
@@ -265,7 +265,7 @@ local function saveSettings()
 		"seed=" .. tostring(getStr(seedTextBox, "1")),
 		"radius=" .. tostring(math.floor(getNum(radiusSlider, 10))),
 		"maxResults=" .. tostring(math.floor(getNum(maxResultsSlider, 15))),
-		"serverUrl=" .. tostring(getStr(serverUrlTextBox, "http://127.0.0.1:7890")),
+		"serverUrl=" .. tostring(getStr(serverUrlTextBox, "https://mineseedfinder.vercel.app")),
 		"notify=" .. tostring(getBool(notifyToggle, true)),
 		"village=" .. tostring(getBool(toggleVillage, true)),
 		"desertPyramid=" .. tostring(getBool(toggleDesertPyramid, true)),
@@ -349,7 +349,7 @@ local function onTick()
 	if not px or px == 0.0 and py == 0.0 and pz == 0.0 then return end
 
 	-- Update server URL if changed (use safe reader for persistence)
-	local url = getStr(serverUrlTextBox, "http://127.0.0.1:7890")
+	local url = getStr(serverUrlTextBox, "https://mineseedfinder.vercel.app")
 	if url and url ~= "" then
 		SERVER_URL = url:gsub("/+$", "") -- trim trailing slash
 	end
