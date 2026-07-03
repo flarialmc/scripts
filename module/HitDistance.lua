@@ -1,7 +1,26 @@
 name = "Hit Distance"
 description = "Shows the distance you were last hit from."
 author = "ZayTheGamer1000"
-debug = true
+debug = false
+
+--[[ DEFAULT VALUES
+As of Flarial 3.0.3.6, the default values for settings do not seem to work.
+If you are here to change the default values, they are provided below.
+]]
+
+-- These are the default X & Y values for the GUI's text.
+guiX = 0
+guiY = 30
+
+-- This is the default font size
+fontSize = 200
+
+-- This is the default duration in seconds
+duration = 3
+
+-- This is the default search range in blocks
+searchRange = 10
+
 
 lastHealth = player.health()
 lastHitDistance = 0.0
@@ -9,45 +28,34 @@ lastHitDistance = 0.0
 showDistance = false
 ticks = 0
 showDistSecs = 0
-guiXSlider = settings.addSlider("GUI X", "The X value that the distance GUI will appear at.",
- 0, -- Default
+
+guiXSlider = settings.addSlider("GUI X", "The X value that the distance GUI will appear at.", 0,
  100, -- Maximum value
  0, -- Minimum value
  false) -- Allow 0 inclusive (for some reason false means true)
 
-guiYSlider = settings.addSlider("GUI Y", "The Y value that the distance GUI will appear at.",
- 30,
+guiYSlider = settings.addSlider("GUI Y", "The Y value that the distance GUI will appear at.", 30,
  100,
  0,
  false)
- 
+
+--Initial constraints (static unless the location of GUIX/GUIY is changed in settings.)
+guiXConstraint = Constraints.PercentageConstraint(guiX / 100, "left", true)
 guiXAdjusted = false
+guiYConstraint = Constraints.PercentageConstraint(guiY / 100, "top", true)
 guiYAdjusted = false
 
--- These are the default X & Y values for the GUI's text.
-guiX = 0
-guiY = 30
-
-guiXConstraint = Constraints.PercentageConstraint(guiX / 100, "left", true)
-guiYConstraint = Constraints.PercentageConstraint(guiY / 100, "top", true)
-
 fontSizeSlider = settings.addTextBox("Font Size", "The size of the gui's text. (Default 200)", "200", 5)
--- This is the default font size
-fontSize = 200
 fontSizeAdjusted = false
 
 showDuration = settings.addTextBox("Duration", "The duration in seconds that the distance will be shown for. (default 3)", "3", 12)
--- This is the default duration in seconds
-duration = 3
 durationAdjusted = false
 
 searchRangeInput = settings.addTextBox("Search range", "The range in which the attacker is searched for. (default 10)", "10", 5)
--- This is the default search range in blocks
-searchRange = 10
 searchRangeAdjusted = false
 
-includeEntities = settings.addToggle("Include entities", "Whether to include hits from non-player entities", false)
-
+includeEntities = settings.addToggle("Include entities", "Whether to include all player entities in detection, rather than just players.", false)
+--No need for a default boolean, as the (real) default and what we want are the same: false.
 
 function onEnable()
 	client.notify("Hit Distance Enabled")
@@ -86,16 +94,15 @@ onEvent("TickEvent", function()
 		ticks = ticks + 1
 	end
 	
-	guiXConstraint = Constraints.PercentageConstraint(guiX / 100, "left", true)
-	guiYConstraint = Constraints.PercentageConstraint(guiY / 100, "top", true)
-	
 	if guiXAdjusted or guiXSlider.value ~= 0.0 then -- X slider has been adjusted for the first time
 		guiXAdjusted = true
 		guiX = guiXSlider.value
+		guiXConstraint = Constraints.PercentageConstraint(guiX / 100, "left", true)
 	end
 	if guiYAdjusted or guiYSlider.value ~= 0.0 then -- Y slider has been adjusted for the first time
 		guiYAdjusted = true
 		guiY = guiYSlider.value
+		guiYConstraint = Constraints.PercentageConstraint(guiY / 100, "top", true)
 	end
 	
 	if durationAdjusted or showDuration.value ~= "" then
@@ -119,7 +126,7 @@ onEvent("TickEvent", function()
 	end
 	
 	if searchRangeAdjusted or searchRangeInput.value ~= "" then 
-		fontSizeAdjusted = true
+		searchRangeAdjusted = true
 		
 		if tonumber(searchRangeInput.value) == nil then
 			searchRange = 0
@@ -127,6 +134,7 @@ onEvent("TickEvent", function()
 			searchRange = math.floor(tonumber(searchRangeInput.value))
 		end
 	end
+
 end)
 
 
@@ -136,27 +144,28 @@ function playerHit()
 	local closestDistance = nil
 	
 	for index, value in ipairs(entities) do
-		if includeEntities.value then -- Setting for include entities or only players
-			if entities[index]:isValid() then
-				if closestDistance == nil or entities[index]:distanceToPlayer() < closestDistance then -- If first or closest player iterated
-					closestDistance = entities[index]:distanceToPlayer()
-					entity = entities[index]
+		
+		if includeEntities.value then -- If all entities included in search
+			if value:isValid() then
+				if closestDistance == nil or value:distanceToPlayer() < closestDistance then -- If first or closest entity iterated
+					closestDistance = value:distanceToPlayer()
+					entity = value
 				end
 			end
 		else
-			if entities[index]:isValid() and entities[index]:getTypeId() == "minecraft:player" then
-				if closestDistance == nil or entities[index]:distanceToPlayer() < closestDistance then -- If first or closest player iterated
-					closestDistance = entities[index]:distanceToPlayer()
-					entity = entities[index]
+			if value:isValid() and value:getTypeId() == "minecraft:player" then
+				if closestDistance == nil or value:distanceToPlayer() < closestDistance then -- If first or closest player iterated
+					closestDistance = value:distanceToPlayer()
+					entity = value
 				end
 			end
 		end		
 	end
 	
-	if entity == nil then -- Failed to find a valid player
-		client.displayLocalMessage("Failed to find a player within range!")
+	if entity == nil then -- Failed to find a valid player or entity
 		return
 	end
+	
 	
 	lastHitDistance = entity:distanceToPlayer()
 	showDistance = true
