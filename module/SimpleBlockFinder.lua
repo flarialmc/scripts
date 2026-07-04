@@ -21,9 +21,15 @@ local ScanButton = settings.addKeybind(
     "Press to scan for the block"
 )
 
+function EuclidianeDistance3D(x1, y1, z1, x2, y2, z2)
+  local dx, dy, dz = x2 - x1, y2 - y1, z2 - z1
+  return math.sqrt(dx * dx + dy * dy + dz * dz)
+end
+
 local LatestScanButtonKey = false
 local IntervalLoop = 0
 local blocksFound = {}
+local blocksDistances = {}
 local TICKS_PER_SECOND = 20
 
 local function ScanBlocks()
@@ -33,6 +39,7 @@ local function ScanBlocks()
     local radius = math.floor(tonumber(Radius.value))
 
     blocksFound = {}
+    blocksDistances = {}
 
     if BlockName.value == "" then
         return
@@ -47,6 +54,7 @@ local function ScanBlocks()
                 if tostring(block):find(BlockName.value, 1, true) then
 
                     table.insert(blocksFound, {x,y,z})
+                    table.insert(blocksDistances, math.floor(EuclidianeDistance3D(x,y,z,px,py,pz)))
                 end
             end
         end
@@ -62,7 +70,7 @@ onEvent("RenderEvent", function()
 
     if #blocksFound > 0 then
         for n, block in ipairs(blocksFound) do
-            ImGui.BulletText(string.format("X: %d Y: %d Z: %d", block[1], block[2]+1, block[3]))
+            ImGui.BulletText(string.format("X: %d Y: %d Z: %d - distance: %d", block[1], block[2]+1, block[3], blocksDistances[n]))
         end
     else
         ImGui.Text("No blocks found yet.")
