@@ -2,24 +2,22 @@ name = "StrongHold Finder"
 description = "Find the StrongHold using only two ender pearls and a little math"
 author = "zebedelu"
 
-local CaptureKey = settings.addKeybind("Position capture key", "Capture Ender Pearl Position", "y")
-local ClearLatestCapture = settings.addKeybind("Clear latest capture", "Clear Capture", "u")
-local ShowResultKey = settings.addKeybind("Show the distance", "Show result", "i")
-local CreateWaypointKey = settings.addKeybind("Create a waypoint to StrongHold", "Create waypoint", "o")
+local CaptureKey = settings.addKeybind("Position capture key", "Capture Ender Pearl Position", "[")
+local ClearLatestCapture = settings.addKeybind("Clear latest capture", "Clear Capture")
+local ShowResultKey = settings.addKeybind("Show the distance", "Show result", "]")
+local CreateWaypoint = settings.addToggle("Create a waypoint to StrongHold when show distance", "Create waypoint", false)
 
-local WaypointCreated = true
+local WaypointCreated = false
 local EstimatedCoordinates = {nil, nil}
 local PlayerInfo = {}
 
 local InseringKeyBug1 = true
 local InseringKeyBug2 = true
 local InseringKeyBug3 = true
-local InseringKeyBug4 = true
 
 local LatestCaptureKey = false
 local LatestClearLatestCapture = false
 local LatestShowResultKey = false
-local LatestCreateWaypointKey = false
 
 function EuclideDistance(x1, z1, x2, z2)
     return math.sqrt((x2 - x1)^2 + (z2 - z1)^2)
@@ -99,15 +97,8 @@ onEvent("TickEvent", function()
             InseringKeyBug3 = false
         end
     end
-    if CreateWaypointKey.value then
-        if InseringKeyBug4 then
-            LatestCreateWaypointKey = true
-            InseringKeyBug4 = false
-        end
-    end
     
     if CaptureKey.value and not LatestCaptureKey then
-
         local x, _, z = player.position()
         local yaw = player.rotation().y
 
@@ -153,36 +144,36 @@ onEvent("TickEvent", function()
                 client.displayLocalMessage("§l§f<SHFinder>§r could not calculate a stable result")
             end
         end
-    end
-
-    if CreateWaypointKey.value and not LatestCreateWaypointKey then
-        local SomeError = true
-        if EstimatedCoordinates[1] == nil then
-            local sx, sz = EstimateStrongholdFromCaptures(PlayerInfo)
-            EstimatedCoordinates = {sx, sz}
+        
+        if CreateWaypoint.value then
+            local SomeError = true
             if EstimatedCoordinates[1] == nil then
-                client.displayLocalMessage("§l§f<SHFinder>§r no capture defined")
+                local sx, sz = EstimateStrongholdFromCaptures(PlayerInfo)
+                EstimatedCoordinates = {sx, sz}
+                if EstimatedCoordinates[1] == nil then
+                    client.displayLocalMessage("§l§f<SHFinder>§r no capture defined")
+                    SomeError = false
+                end
+            end
+            if WaypointCreated then
+                client.displayLocalMessage("§l§f<SHFinder>§r waypoint already created!")
                 SomeError = false
             end
-        end
-        if WaypointCreated then
-            client.displayLocalMessage("§l§f<SHFinder>§r waypoint already created!")
-            SomeError = false
-        end
-        if #PlayerInfo < 2 then
-            client.displayLocalMessage("§l§f<SHFinder>§r need at least 2 captures: [%d]", #PlayerInfo)
-            SomeError = false
-        end
-        if SomeError then
-            player.say(
-                string.format(".waypoint add %d 100 %d", math.floor(EstimatedCoordinates[1]), math.floor(EstimatedCoordinates[2]))
-            )
-            WaypointCreated = true
+            if #PlayerInfo < 2 then
+                client.displayLocalMessage("§l§f<SHFinder>§r need at least 2 captures: [%d]", #PlayerInfo)
+                SomeError = false
+            end
+
+            if SomeError then
+                player.say(
+                    string.format(".waypoint add %d 100 %d", math.floor(EstimatedCoordinates[1]), math.floor(EstimatedCoordinates[2]))
+                )
+                WaypointCreated = true
+            end
         end
     end
 
     LatestCaptureKey = CaptureKey.value
     LatestClearLatestCapture = ClearLatestCapture.value
     LatestShowResultKey = ShowResultKey.value
-    LatestCreateWaypointKey = CreateWaypointKey.value
 end)

@@ -2,7 +2,7 @@ name = "Simple Block Finder"
 description = "Scans the area around the player and lists matching blocks nearby"
 author = "zebedelu"
 
-local Radius = settings.addSlider("Radius", "Search radius", 4, 50, 1, false)
+local Radius = settings.addSlider("Radius", "Search radius", 4, 20, 1, false)
 local UseInterval = settings.addToggle(
     "Auto Scan",
     "If enabled, scans automatically on a timer instead of using the keybind",
@@ -58,6 +58,7 @@ onEvent("RenderEvent", function()
 	ImGui.SetNextWindowBgAlpha(0.6)
     ImGui.Begin("SimpleBlockFinder")
     ImGui.Text("Blocks found nearby:")
+    ImGui.Text(string.format("Radius: %d | Block: %s", math.floor(tonumber(Radius.value)), BlockName.value))
 
     if #blocksFound > 0 then
         for n, block in ipairs(blocksFound) do

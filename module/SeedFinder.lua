@@ -250,85 +250,7 @@ local TOGGLE_TYPE_MAP = {
 }
 
 -- ============================================================================
--- Section 4: Manual Settings Persistence (fs-based)
--- Flarial's settings API for Lua scripts does NOT persist custom setting values
--- (sliders, textboxes, toggles, keybinds). Only visual properties are saved.
--- We use fs.writeFile/readFile to persist our settings manually.
--- ============================================================================
-
-local SAVE_PATH = "Scripts/Configs/SeedFinder_settings.txt"
-local lastSaveTime = 0
-local saveThrottle = 3 -- seconds between saves
-
-local function saveSettings()
-	local lines = {
-		"seed=" .. tostring(getStr(seedTextBox, "1")),
-		"radius=" .. tostring(math.floor(getNum(radiusSlider, 10))),
-		"maxResults=" .. tostring(math.floor(getNum(maxResultsSlider, 15))),
-		"serverUrl=" .. tostring(getStr(serverUrlTextBox, "https://mineseedfinder.vercel.app")),
-		"notify=" .. tostring(getBool(notifyToggle, true)),
-		"village=" .. tostring(getBool(toggleVillage, true)),
-		"desertPyramid=" .. tostring(getBool(toggleDesertPyramid, true)),
-		"jungleTemple=" .. tostring(getBool(toggleJungleTemple, true)),
-		"swampHut=" .. tostring(getBool(toggleSwampHut, true)),
-		"outpost=" .. tostring(getBool(toggleOutpost, true)),
-		"igloo=" .. tostring(getBool(toggleIgloo, true)),
-		"oceanMonument=" .. tostring(getBool(toggleOceanMonument, true)),
-		"oceanRuin=" .. tostring(getBool(toggleOceanRuin, true)),
-		"mansion=" .. tostring(getBool(toggleMansion, true)),
-		"ancientCity=" .. tostring(getBool(toggleAncientCity, true)),
-		"trailRuins=" .. tostring(getBool(toggleTrailRuins, true)),
-		"ruinedPortal=" .. tostring(getBool(toggleRuinedPortal, true)),
-		"buriedTreasure=" .. tostring(getBool(toggleBuriedTreasure, true)),
-		"geode=" .. tostring(getBool(toggleGeode, true)),
-	}
-	pcall(fs.writeFile, SAVE_PATH, table.concat(lines, "\n"))
-end
-
-local function throttledSave()
-	local now = os.clock()
-	if now - lastSaveTime >= saveThrottle then
-		lastSaveTime = now
-		pcall(saveSettings)
-	end
-end
-
-local function loadSettings()
-	local ok, data = pcall(fs.readFile, SAVE_PATH)
-	if not ok or not data or type(data) ~= "string" then return end
-
-	local saved = {}
-	for line in data:gmatch("[^\n]+") do
-		local key, val = line:match("^([^=]+)=(.+)$")
-		if key and val then
-			saved[key] = val
-		end
-	end
-
-	-- Apply saved values to settings objects
-	if saved.seed then seedTextBox.value = saved.seed end
-	if saved.radius then radiusSlider.value = tonumber(saved.radius) or 10 end
-	if saved.maxResults then maxResultsSlider.value = tonumber(saved.maxResults) or 15 end
-	if saved.serverUrl then serverUrlTextBox.value = saved.serverUrl end
-	if saved.notify then notifyToggle.value = saved.notify == "true" end
-	if saved.village then toggleVillage.value = saved.village == "true" end
-	if saved.desertPyramid then toggleDesertPyramid.value = saved.desertPyramid == "true" end
-	if saved.jungleTemple then toggleJungleTemple.value = saved.jungleTemple == "true" end
-	if saved.swampHut then toggleSwampHut.value = saved.swampHut == "true" end
-	if saved.outpost then toggleOutpost.value = saved.outpost == "true" end
-	if saved.igloo then toggleIgloo.value = saved.igloo == "true" end
-	if saved.oceanMonument then toggleOceanMonument.value = saved.oceanMonument == "true" end
-	if saved.oceanRuin then toggleOceanRuin.value = saved.oceanRuin == "true" end
-	if saved.mansion then toggleMansion.value = saved.mansion == "true" end
-	if saved.ancientCity then toggleAncientCity.value = saved.ancientCity == "true" end
-	if saved.trailRuins then toggleTrailRuins.value = saved.trailRuins == "true" end
-	if saved.ruinedPortal then toggleRuinedPortal.value = saved.ruinedPortal == "true" end
-	if saved.buriedTreasure then toggleBuriedTreasure.value = saved.buriedTreasure == "true" end
-	if saved.geode then toggleGeode.value = saved.geode == "true" end
-end
-
--- ============================================================================
--- Section 5: Module State
+-- Section 4: Module State
 -- ============================================================================
 
 local scanResults = {}
@@ -340,7 +262,7 @@ local lastDimension = ""
 local rescanKeyHeld = false
 
 -- ============================================================================
--- Section 6: TickEvent Handler
+-- Section 5: TickEvent Handler
 -- ============================================================================
 
 local function onTick()
@@ -388,8 +310,6 @@ local function onTick()
 	end
 	rescanKeyHeld = rescanKeyDown
 
-	-- Persist settings to disk (throttled)
-	throttledSave()
 
 	if not needsRescan then return end
 	if not currentSeed then return end
@@ -444,7 +364,7 @@ local function onTick()
 end
 
 -- ============================================================================
--- Section 7: RenderEvent Handler
+-- Section 6: RenderEvent Handler
 -- ============================================================================
 
 local function onRender()
@@ -458,7 +378,6 @@ local function onRender()
 
 	if not serverOnline then
 		ImGui.Text("Server offline!")
-		ImGui.Text("Start seedfinder_server.py first")
 		ImGui.Text("URL: " .. SERVER_URL)
 	elseif not currentSeed then
 		ImGui.Text("Enter a seed in settings to begin")
@@ -484,12 +403,10 @@ local function onRender()
 end
 
 -- ============================================================================
--- Section 8: Module Lifecycle
+-- Section 7: Module Lifecycle
 -- ============================================================================
 
 function onLoad()
-	-- Load saved settings from disk (restores values after script reload)
-	loadSettings()
 	log("SeedFinder loaded (HTTP Bridge Edition)")
 	log("Make sure seedfinder_server.py is running on " .. SERVER_URL)
 end
@@ -511,12 +428,11 @@ end
 
 function onDisable()
 	-- Save settings immediately when module is disabled
-	pcall(saveSettings)
 	scanResults = {}
 end
 
 -- ============================================================================
--- Section 9: Chat Commands
+-- Section 8: Chat Commands
 -- ============================================================================
 
 registerCommand("seedscan", function()
