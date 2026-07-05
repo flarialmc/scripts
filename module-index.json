@@ -27,6 +27,15 @@
     "path": "module/BetterCoordinates.lua"
   },
   {
+    "filename": "BuriedTreasureFinder.lua",
+    "name": "Buried Treasure Finder",
+    "description": "Scans the area around the player and lists buried treasure near",
+    "author": "zebedelu",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/BuriedTreasureFinder.lua"
+  },
+  {
     "filename": "CubeCraftUtils.lua",
     "name": "CubeCraft Utils",
     "description": "Automatically invites online friends, accepts party invites, rage quits to the lobby and tracks player kills with a UI.",
@@ -43,6 +52,24 @@
     "version": "1.0.0",
     "type": "module",
     "path": "module/Moka'sSudoku.lua"
+  },
+  {
+    "filename": "SimpleBlockFinder.lua",
+    "name": "Simple Block Finder",
+    "description": "Scans the area around the player and lists matching blocks nearby",
+    "author": "zebedelu",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/SimpleBlockFinder.lua"
+  },
+  {
+    "filename": "StrongHoldFinder.lua",
+    "name": "StrongHold Finder",
+    "description": "Find the StrongHold using only two ender pearls and a little math",
+    "author": "zebedelu",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/StrongHoldFinder.lua"
   },
   {
     "filename": "TPScounter.lua",
