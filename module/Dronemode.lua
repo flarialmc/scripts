@@ -1,6 +1,7 @@
 name = "Drone mode"
-description = "Its a drone, not freecam :D"
+description = "Its a drone mode, not freecam :D"
 author = "zebedelu"
+version = 2.0
 
 -- ==========================================
 -- 1. CONSTANTES E ESTADO GLOBAL
@@ -235,7 +236,7 @@ onEvent("KeyEvent", function(key, action)
             end
 
         elseif isTPKey and canUseKey("teleport") then
-            if scanCompleted and renderVisible then
+            if renderVisible then
                 -- Chamada de player.* aqui e segura: so roda em resposta a tecla, nao a cada frame
                 local pX, pY, pZ = player.position()
                 camX, camY, camZ = pX, pY + 1.6, pZ
