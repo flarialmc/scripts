@@ -25,6 +25,8 @@ local frame = 1
 local video = BadApple()
 
 onEvent("RenderEvent", function()
+	local drawList = ImGui.GetForegroundDrawList()
+	
     frame = frame + video.fps/20
 	
 	if tonumber(frame) >= video.frame_count then
@@ -48,7 +50,7 @@ onEvent("RenderEvent", function()
 				else
 					rgb_pixel = {0,0,0,255}
 				end
-				gui.button(x*10+(i*10), y*10, rgb_pixel, rgb_pixel, "", 10,10)
+                drawList:AddRectFilled({ x*10+(i*10), y*10 }, { x*10+(i*10)+10, y*10+10 }, rgb_pixel,0,0)
 			end
 		end
 	end
