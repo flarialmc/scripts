@@ -77,7 +77,7 @@ onEvent("ChatReceiveEvent", function(message, AuthorName, type)
 
         if (((Tolerance.value == 0 and percentageScore >= 100) or
             (Tolerance.value ~= 0) and percentageScore >= tonumber(Tolerance.value))
-            and AuthorName ~= PlayerName) or string.find(message, "@here") then
+            and "@"..AuthorName ~= PlayerName) or string.find(message, "@here") then
             
             if FilePath.value ~= "" then
                 audio.play(FilePath.value)
