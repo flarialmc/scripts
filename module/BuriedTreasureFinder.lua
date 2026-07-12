@@ -2,7 +2,7 @@ name = "Buried Treasure Finder"
 description = "Scans the area around the player and lists buried treasure near"
 author = "zebedelu"
 
-local Radius = settings.addSlider("Radius (in chunks)", "Search radius (Chunks), more radius = more lag", 4, 40, 1, false)
+local Radius = settings.addSlider("Radius (in chunks)", "Search radius (chunks)", 4, 40, 1, false)
 local UseInterval = settings.addToggle(
     "Auto Scan",
     "If enabled, scans automatically on a timer instead of using the keybind",

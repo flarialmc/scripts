@@ -2,7 +2,7 @@ name = "Simple Block Finder"
 description = "Scans the area around the player and lists matching blocks nearby"
 author = "zebedelu"
 
-local Radius = settings.addSlider("Radius", "Search radius, more radius = more lag", 4, 30, 1, false)
+local Radius = settings.addSlider("Radius", "Search radius", 4, 20, 1, false)
 local UseInterval = settings.addToggle(
     "Auto Scan",
     "If enabled, scans automatically on a timer instead of using the keybind",

@@ -1,4 +1,4 @@
-name = "Notification when called"
+name = "Notify when called"
 description = "Shows a notification when you are mentioned in chat"
 author = "zebedelu"
 
@@ -62,27 +62,32 @@ end
 local PlayerName
 
 settings.addHeader("Configure Mention Sound")
-local Tolerance = settings.addSlider("Tolerance", "How accurate must the name be? (default: 90%)", 90, 100, 20, false)
+local Tolerance = settings.addSlider("Tolerance", "How accurate must the name be? (default: 100%)", 90, 100, 20, false)
 local FilePath = settings.addTextBox("File path", "default: 'Scripts/Data/MentionedSound.mp3'", "Scripts\\Data\\MentionedSound.mp3", 150)
+local Notification = settings.addToggle("Notification", "Notification in hotbar when called", true)
 
 function onEnable()
-    PlayerName = player.name()
-    client.notify("Mention Sound enabled!")
+    PlayerName = "@"..player.name()
 end
 
 onEvent("ChatReceiveEvent", function(message, AuthorName, type)
-    local percentageScore = findBestMatch(PlayerName, message)
+    message = string.gsub(message, "@", " @")
+    if string.find(message, "@") then
+        local percentageScore = findBestMatch(PlayerName, message)
 
-    if ((Tolerance.value == 0 and percentageScore >= 90) or
-        (Tolerance.value ~= 0) and percentageScore >= tonumber(Tolerance.value))
-        and AuthorName ~= PlayerName then
-        
-        if FilePath.value ~= "" then
-            audio.play(FilePath.value)
-        else
-            audio.play("Scripts\\Data\\MentionedSound.mp3")
+        if (((Tolerance.value == 0 and percentageScore >= 100) or
+            (Tolerance.value ~= 0) and percentageScore >= tonumber(Tolerance.value))
+            and AuthorName ~= PlayerName) or string.find(message, "@here") then
+            
+            if FilePath.value ~= "" then
+                audio.play(FilePath.value)
+            else
+                audio.play("Scripts\\Data\\MentionedSound.mp3")
+            end
+            
+            if Notification.value then
+                client.notify(AuthorName.." has mentioned you!")
+            end
         end
-
-        client.notify(AuthorName.." has mentioned you!")
     end
 end)
