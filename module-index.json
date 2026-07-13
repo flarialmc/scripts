@@ -45,6 +45,15 @@
     "path": "module/CubeCraftUtils.lua"
   },
   {
+    "filename": "HitDistance.lua",
+    "name": "Hit Distance",
+    "description": "Shows the distance you were last hit from.",
+    "author": "ZayTheGamer1000",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/HitDistance.lua"
+  },
+  {
     "filename": "Moka'sSudoku.lua",
     "name": "Moka",
     "description": "Moka",
