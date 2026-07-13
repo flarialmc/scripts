@@ -1,11 +1,11 @@
 name = "Calculator"
-description = "Arithmetic Calculator in Minecraft itself"
+description = "Arithmetic Calculator in Minecraft itself use .calc for more info"
 author = "Streoids"
 aliases = {"calc", "calchelp"}
 
 function execute(args)
     if #args==0 then
-        print("§ecalc is a simple calculator that runs in Minecraft, by §6S§6t§6r§6e§6o§6i§6d§6s")
+        print("§eCalc is a simple calculator that runs in Minecraft, by §6S§6t§6r§6e§6o§6i§6d§6s")
         print("§fIt can perform arithmetic functions such as:")
         print("§o§bAddition [ + ]")
         print("§o§bSubtraction [ - ]")
@@ -18,7 +18,6 @@ function execute(args)
         print("§b.calc 16/2")
         print("§b.calc 6-3")
         print("§b.calc 6^2")
-        print("§k§2!.§a:§2'§r §4Flarial on top! §k§2!.§a:§2'")
         return
     end
     local expression=table.concat(args, " ")
@@ -33,7 +32,7 @@ function execute(args)
     local success, result=pcall(func)
     if not success then return print("§4calc: Invalid calculation") end
     if result==math.huge or result==-math.huge then
-        return print("§4calc: Can't divide by 0. Consider getting an education")
+        return print("§4calc: Can't divide by 0.")
     end
     print("§acalc: "..(math.floor(result)==result and math.floor(result) or result))
 end
