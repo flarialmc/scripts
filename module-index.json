@@ -18,6 +18,15 @@
     "path": "module/Auto Crasher.lua"
   },
   {
+    "filename": "BadApple.lua",
+    "name": "Bad Apple",
+    "description": "If this has a screen, it run bad apple",
+    "author": "zebedelu",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/BadApple.lua"
+  },
+  {
     "filename": "BetterCoordinates.lua",
     "name": "Better Coordinates",
     "description": "Displays player coordinates",
@@ -45,6 +54,15 @@
     "path": "module/CubeCraftUtils.lua"
   },
   {
+    "filename": "Dronemode.lua",
+    "name": "Drone mode",
+    "description": "Its a drone mode, not freecam :D",
+    "author": "zebedelu",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/Dronemode.lua"
+  },
+  {
     "filename": "HitDistance.lua",
     "name": "Hit Distance",
     "description": "Shows the distance you were last hit from.",
@@ -61,6 +79,15 @@
     "version": "1.0.0",
     "type": "module",
     "path": "module/Moka'sSudoku.lua"
+  },
+  {
+    "filename": "Notify When Called.lua",
+    "name": "Notify when called",
+    "description": "Shows a notification when you are mentioned in chat",
+    "author": "zebedelu",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/Notify When Called.lua"
   },
   {
     "filename": "SimpleBlockFinder.lua",
@@ -97,6 +124,15 @@
     "version": "1.0.0",
     "type": "module",
     "path": "module/Usage Limiter.lua"
+  },
+  {
+    "filename": "ZFlarialRepo.lua",
+    "name": "ZFlarialRepo",
+    "description": "Browse, manage and install community Lua scripts",
+    "author": "zebedelu",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/ZFlarialRepo.lua"
   },
   {
     "filename": "chat filter.lua",
