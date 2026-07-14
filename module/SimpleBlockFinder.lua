@@ -11,14 +11,21 @@ local UseInterval = settings.addToggle(
 local Interval = settings.addSlider(
     "Interval",
     "Time between automatic scans (seconds)",
-    1, 10, 1, false)
+    1, 10, 1, false
+)
 local BlockName = settings.addTextBox(
     "Block",
     "Name (or part of the name) of the block to search for",
-    "chest",50)
+    "chest",50
+)
 local ScanButton = settings.addKeybind(
     "Scan",
     "Press to scan for the block"
+)
+local ColorButton = settings.addSlider(
+    "Color Showline",
+    "Colors: 1 - White, 2 - Red, 3 - Green, 4 - Blue",
+    1, 4, 1, false
 )
 
 function EuclidianeDistance3D(x1, y1, z1, x2, y2, z2)
@@ -31,6 +38,12 @@ local IntervalLoop = 0
 local blocksFound = {}
 local blocksDistances = {}
 local TICKS_PER_SECOND = 20
+local COLORS = {
+    {255,255,255,255},
+    {255,0,0,255},
+    {0,255,0,255},
+    {0,0,255,255}
+}
 
 local function ScanBlocks()
     local px, py, pz = player.position()
@@ -62,21 +75,14 @@ local function ScanBlocks()
 end
 
 onEvent("RenderEvent", function()
-	ImGui.SetNextWindowSize({350, 300}, 4)
-	ImGui.SetNextWindowBgAlpha(0.6)
-    ImGui.Begin("SimpleBlockFinder")
-    ImGui.Text("Blocks found nearby:")
-    ImGui.Text(string.format("Radius: %d | Block: %s", math.floor(tonumber(Radius.value)), BlockName.value))
-
     if #blocksFound > 0 then
         for n, block in ipairs(blocksFound) do
-            ImGui.BulletText(string.format("X: %d Y: %d Z: %d - distance: %d", block[1], block[2]+1, block[3], blocksDistances[n]))
+            local _, blockX, blockY = world.worldToScreen(block[1]+0.5, block[2]+0.5, block[3]+0.5)
+            local block_size_pixels = math.min(-blocksDistances[n]*0.2+50, 30)
+            local color_id = COLORS[math.floor(tonumber(ColorButton.value))]
+        	gui.button(blockX, blockY, color_id, color_id, tostring(blocksDistances[n]), block_size_pixels, block_size_pixels)
         end
-    else
-        ImGui.Text("No blocks found yet.")
     end
-    
-    ImGui.End()
 end)
 
 onEvent("TickEvent", function()

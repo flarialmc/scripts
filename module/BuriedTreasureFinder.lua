@@ -2,15 +2,28 @@ name = "Buried Treasure Finder"
 description = "Scans the area around the player and lists buried treasure near"
 author = "zebedelu"
 
-local Radius = settings.addSlider("Radius (in chunks)", "Search radius (Chunks)", 4, 10, 1, false)
+local Radius = settings.addSlider("Radius (in chunks)", "Search radius (chunks)", 4, 40, 1, false)
+local UseInterval = settings.addToggle(
+    "Auto Scan",
+    "If enabled, scans automatically on a timer instead of using the keybind",
+    false
+)
+local Interval = settings.addSlider(
+    "Interval",
+    "Time between automatic scans (seconds)",
+    1, 10, 1, false
+)
 local ScanButton = settings.addKeybind(
-    "Scan Button",
-    "Press to scan for the buried treasure"
+    "Scan",
+    "Press to scan for the chest"
 )
 
 local LatestScanButtonKey = false
+local IntervalLoop = 0
 local chestsFind = {}
 local chestsDistances = {}
+local TICKS_PER_SECOND = 20
+local CHEST_COLOR = {137, 109, 31, 200}
 
 function EuclideDistance(x1, z1, x2, z2)
     return math.sqrt((x2 - x1)^2 + (z2 - z1)^2)
@@ -40,30 +53,32 @@ local function ScanChunksPerBuriedTreasure()
             end
         end
     end
-    client.notify("Found "..#chestsFind.." near")
 end
 
 onEvent("RenderEvent", function()
-	ImGui.SetNextWindowSize({350, 300}, 4)
-	ImGui.SetNextWindowBgAlpha(0.6)
-    ImGui.Begin("BuriedTreasureFinder")
-    ImGui.Text("Chests found nearby:")
-
     if #chestsFind > 0 then
         for n, block in ipairs(chestsFind) do
-            ImGui.BulletText(string.format("X: %d Y: %d Z: %d - %d blocks", block[1], block[2]+1, block[3], chestsDistances[n]))
+            local _, blockX, blockY = world.worldToScreen(block[1]+0.5, block[2]+0.5, block[3]+0.5)
+            local chest_size_pixels = math.min(-chestsDistances[n]*0.2+50, 30)
+        	gui.button(blockX, blockY, CHEST_COLOR, {0,0,0,255}, tostring(chestsDistances[n]), chest_size_pixels, chest_size_pixels)
         end
-    else
-        ImGui.Text("No chests found yet.")
     end
-    
-    ImGui.End()
 end)
 
 onEvent("TickEvent", function()
-    if ScanButton.value and not LatestScanButtonKey then
-        client.notify("Scaning...")
-        ScanChunksPerBuriedTreasure()
+    if UseInterval.value then
+        IntervalLoop = IntervalLoop + 1
+
+        if IntervalLoop >= Interval.value * TICKS_PER_SECOND then
+            ScanChunksPerBuriedTreasure()
+            IntervalLoop = 0
+        end
+    else
+        if ScanButton.value and not LatestScanButtonKey then
+            client.notify("Scaning...")
+            ScanChunksPerBuriedTreasure()
+            client.notify("Found "..#chestsFind.." near")
+        end
     end
 
     LatestScanButtonKey = ScanButton.value
