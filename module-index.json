@@ -9,6 +9,15 @@
     "path": "module/AFKmessage.lua"
   },
   {
+    "filename": "Armor blocker.lua",
+    "name": "Armor blocker",
+    "description": "Blocks weaker armor if you",
+    "author": "Streoids",
+    "version": "1.0.0",
+    "type": "module",
+    "path": "module/Armor blocker.lua"
+  },
+  {
     "filename": "Auto Crasher.lua",
     "name": "Auto Crasher 5000",
     "description": "Auto Crashes your game when you enable it",
