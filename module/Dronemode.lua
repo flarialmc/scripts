@@ -468,7 +468,7 @@ local function renderHologram()
         local dx = wx + 0.5 - pX
         local dy = wy + 0.5 - pY
         local dz = wz + 0.5 - pZ
-        if dx*dx + dy*dy + dz*dz > 400 then goto next_block end
+        if dx*dx + dy*dy + dz*dz > 900 then goto next_block end
         if dx * fX + dy * fY + dz * fZ < 0 then goto next_block end
         if isSolid(x+1, y, z) and isSolid(x-1, y, z) and isSolid(x, y+1, z) and isSolid(x, y-1, z) and isSolid(x, y, z+1) and isSolid(x, y, z-1) then goto next_block end
 
