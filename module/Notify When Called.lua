@@ -60,13 +60,18 @@ local function findBestMatch(word, text)
 end
 
 local PlayerName
+local FILE_PATH = 'Scripts\\Data\\'
 
 settings.addHeader("Configure Mention Sound")
 local Tolerance = settings.addSlider("Tolerance", "How accurate must the name be? (default: 100%)", 90, 100, 20, false)
-local FilePath = settings.addTextBox("File path", "default: 'Scripts/Data/MentionedSound.mp3'", "Scripts\\Data\\MentionedSound.mp3", 150)
+local FilePath = settings.addTextBox("File path", "default: 'MentionedSound.mp3'", "MentionedSound.mp3", 150)
 local Notification = settings.addToggle("Notification", "Notification in hotbar when called", true)
+local NotiWhenAudioNotFound = settings.addToggle("No file found notification", "Notification in hotbar when not audio file found", true)
 
 function onEnable()
+    client.displayLocalMessage("To costumize the audio put the audio file in")
+    client.displayLocalMessage("%localappdata%/Flarial/Client/Scripts/Data OR The Data folder in Scripts")
+    client.displayLocalMessage("And configure the name of the file in module settings")
     PlayerName = "@"..player.name()
 end
 
@@ -80,9 +85,15 @@ onEvent("ChatReceiveEvent", function(message, AuthorName, type)
             and "@"..AuthorName ~= PlayerName) or string.find(message, "@here") then
             
             if FilePath.value ~= "" then
-                audio.play(FilePath.value)
+                NoError = audio.play(FILE_PATH..FilePath.value)
+                if not NoError then
+                    audio.play(FILE_PATH.."MentionedSound.mp3")
+                    if NotiWhenAudioNotFound.value then
+                        client.notify(string.format("No Audio File Found: %s", tostring(FilePath.value)))
+                    end
+                end
             else
-                audio.play("Scripts\\Data\\MentionedSound.mp3")
+                audio.play(FILE_PATH.."MentionedSound.mp3")
             end
             
             if Notification.value then
