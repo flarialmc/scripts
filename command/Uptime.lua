@@ -1,7 +1,7 @@
 name = "uptime"
-description = "Tells the time since Minecraft has started."
+description = "Tells the time since Minecraft has started. usage: .uptime or .up"
 author = "Streoids"
-aliases = {"uptm"}
+aliases = {"uptm", "uptime", "up"}
 
 local start=os.time()
 function execute(args)
